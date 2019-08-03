@@ -2,6 +2,21 @@
 canvas = document.getElementById("canvas");
 ctx = canvas.getContext("2d");
 ctx.font = "italic 10pt Arial";
+var circleXSize = 10;
+var circleYSize = 10;
+
+reader = new FileReader();
+reader.onload = (e) => {
+	nodes = JSON.parse(e.target.result);
+	nodes.map( (node) => { node["is_visible"] = true;})
+	
+	nodes.map( (node) => {
+		ctx.drawImage(green,node.x, node.y, circleXSize, circleYSize);
+	})
+}
+
+var nodes = [];
+var file = 0;
 map = new Image();
 map.src = "map.jpg";
 
@@ -11,17 +26,19 @@ green.src = "green.png";
 red = new Image();
 red.src = "red.png";
 
-const inputElement = document.getElementById("input");
-inputElement.addEventListener("change", handleFiles, false);
+const inputFile = document.getElementById("file");
 
-function handleFiles() {
-  alet(this.files);
+inputFile.addEventListener('change', handleFile, false);
+
+canvas.onclick = (e) => {
+	
 }
 
-document.onclick = (e) => {
-	ctx.drawImage(green,e.clientX, e.clientY,10,10);
-	ctx.drawImage(red,e.clientX+100, e.clientY,10,10);
+function handleFile() {
+	file = this.files[0];
+	reader.readAsText(file);
 }
+
 map.onload = function() {
 	ctx.drawImage(map,0,0,1910,859);
 }
