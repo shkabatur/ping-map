@@ -18,13 +18,13 @@ def update_nodes():
         if n['ip'] in responses:
             n['ping'] = responses[n['ip']] * 1000
             n['result'] = True
-            print("OK")
+            #print("OK")
         else:
             n['ping'] = 9999
             n['result'] = False
-            print("FUCK")
+            #print("FUCK")
 
-update_nodes()
+#update_nodes()
 
 @route('/<filename>')
 def server_static(filename):
