@@ -11,7 +11,6 @@ ips = [n['ip'] for n in nodes]
     
 def update_nodes():
     threading.Timer(5.0, update_nodes).start()
-    print("hey")
     responses, no_responses = multi_ping(ips, timeout=2, retry=3)
     for n in nodes:
         if n['ip'] in responses:
