@@ -14,7 +14,6 @@ red = new Image();
 red.src = "red.png";
 
 const inputFile = document.getElementById("file");
-//const node_name = document.getElementById("node_name");
 
 var nodes = {
 	nodes_list : null,
