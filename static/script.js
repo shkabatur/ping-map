@@ -1,19 +1,57 @@
-ctx = document.getElementById("canvas").getContext("2d");
+
+var canvas = document.getElementById("canvas")
+var ctx = canvas.getContext("2d");
 ctx.font = "italic 10pt Arial";
-map = new Image();
+
+var map = new Image();
 map.src = "map.jpg";
 
-green = new Image();
+var green = new Image();
 green.src = "green.png";
 
-red = new Image();
+var red = new Image();
 red.src = "red.png";
 
-document.onclick = (e) => {
-	ctx.drawImage(green,e.clientX, e.clientY,10,10);
-	ctx.drawImage(red,e.clientX+100, e.clientY,10,10);
-}
-map.onload = function() {
+var nodes;
+
+function draw_map() {
 	ctx.drawImage(map,0,0,1910,859);
+}
+
+function draw_green(node) {
+	ctx.drawImage(green,node.x,node.y,10,10);
+	ctx.fillStyle = "green";
+	ctx.fillText(node.name, node.x, node.y);
+}
+
+function draw_red(node) {
+	ctx.drawImage(red,node.x,node.y,10,10);
+	ctx.fillStyle = "red";
+	ctx.fillText(node.name, node.x, node.y);
+}
+
+
+map.onload = function() {
+	draw_map()
+	
+	setInterval(function() {
+		fetch('./nodes')
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			draw_map();
+			nodes = data;
+			nodes.forEach( node => {
+				if (node.result == true) {
+					draw_green(node)
+				} else {
+					draw_red(node)
+				}
+			});
+		});
+	}, 5000);		
+
+		
 }
 
