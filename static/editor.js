@@ -85,7 +85,23 @@ reader.onload = (e) => {
 	}, 50);
 }
 
-inputFile.addEventListener('change', handleFile, false);
+load_nodes.onclick= function() {
+	fetch('./nodes')
+		.then(response => {
+			return response.json()
+		})
+		.then(data => {
+			nodes.nodes_list = data;
+			
+			nodes.nodes_list_init()
+			nodes.show_nodes()	
+	
+			setInterval(function(){ 
+				ctx.drawImage(map,0,0,1910,859); 
+				nodes.show_nodes();
+			}, 50);
+		});	
+}
 
 canvas.onclick = (e) => {
 	if (nodes.moving.is_moving) {
@@ -134,10 +150,7 @@ canvas.onmousemove = (e) => {
 		ctx.stroke();
 	}
 }
-function handleFile() {
-	file = this.files[0];
-	reader.readAsText(file);
-}
+
 
 map.onload = function() {
 	ctx.drawImage(map,0,0,1910,859);
@@ -154,6 +167,11 @@ change_ip.onclick = (e) => {
 }
 
 save_button.onclick = (e) => {
-	content = new Blob([JSON.stringify(nodes.nodes_list).split(',{').join(',\n{')], {type: "text/plain;charset=utf-8"});
-	saveAs(content, 'nodes.json');
+	fetch('change-nodes', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(nodes.nodes_list)
+	})
 }

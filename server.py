@@ -7,9 +7,10 @@ import asyncio
 
 with open('nodes.json', encoding='utf-8') as f:
     nodes = json.load(f)
+print('initialization <> id(nodes) = {}'.format(id(nodes)))
 ips = [n['ip'] for n in nodes]
 
-
+my_request = []
     
 def update_nodes():
     threading.Timer(5.0, update_nodes).start()
@@ -24,7 +25,14 @@ def update_nodes():
             n['result'] = False
             #print("FUCK")
 
-#update_nodes()
+@post('/change-nodes')
+def change_nodes():
+    with open('nodes.json', 'w',  encoding='utf-8') as f:
+        f.write(json.dumps(request.json)) 
+    nodes = request.json
+    ips = [n['ip'] for n in nodes]
+    print('change_nodes <> id(nodes) = {}'.format(id(nodes)))
+
 
 @route('/<filename>')
 def server_static(filename):
@@ -41,6 +49,7 @@ def edit():
 @route('/nodes')
 def retur_nodes():
     response.content_type = 'application/json'
+    print('return nodes <> id(nodes) = {}'.format(id(nodes)))
     return json.dumps(nodes)
     
 threading.Thread(target=update_nodes).start()
