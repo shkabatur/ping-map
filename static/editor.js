@@ -107,9 +107,13 @@ canvas.onclick = (e) => {
 canvas.ondblclick = (e) => {
 	node_id = nodes.is_click_on_node(e.layerX-c_x/2, e.layerY-c_y/2);
 	if (node_id >= 0) {
-		new_node_name.value = nodes.nodes_list[node_id].name;
-		new_node_ip.value =  nodes.nodes_list[node_id].ip;
-		nodes.current_node_id = node_id;
+		if (e.altKey) { // Если нажат альт, то удаляем узел
+			nodes.nodes_list.splice(node_id, 1)
+		} else {
+			new_node_name.value = nodes.nodes_list[node_id].name;
+			new_node_ip.value =  nodes.nodes_list[node_id].ip;
+			nodes.current_node_id = node_id;
+		}
 	} else {
 		node = {
 			x : e.layerX-c_x/2,
